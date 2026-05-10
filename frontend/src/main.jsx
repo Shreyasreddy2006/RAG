@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { createRoot } from "react-dom/client";
 import "./styles.css";
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "https://rag-1-yo58.onrender.com";
+
 function UploadView({ onIndexed }) {
   const [file, setFile] = useState(null);
   const [status, setStatus] = useState("");
@@ -32,7 +34,7 @@ function UploadView({ onIndexed }) {
       const formData = new FormData();
       formData.append("document", file);
 
-      const response = await fetch("/api/upload", {
+      const response = await fetch(`${BACKEND_URL}/api/upload`, {
         method: "POST",
         body: formData
       });
@@ -135,7 +137,7 @@ function ChatView({ documentMetadata, onChangeDocument }) {
     ]);
 
     try {
-      const response = await fetch("/api/ask", {
+      const response = await fetch(`${BACKEND_URL}/api/ask`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query: trimmedQuery })
