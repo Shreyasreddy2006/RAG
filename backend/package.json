@@ -1,0 +1,22 @@
+{
+  "name": "document-rag-backend",
+  "version": "1.0.0",
+  "description": "Node.js backend for strict document-grounded RAG with Gemini generation.",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js",
+    "check": "node --check src/server.js && node --check src/documentStore.js && node --check src/gemini.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "type": "commonjs",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "multer": "^2.1.1",
+    "pdf-parse": "^2.4.5"
+  }
+}

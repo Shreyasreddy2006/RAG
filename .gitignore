@@ -1,0 +1,15 @@
+backend/node_modules/
+frontend/node_modules/
+backend/data/uploads/
+backend/data/vector-store.json
+frontend/dist/
+.DS_Store
+
+# Test scripts
+backend/test-*.js
+frontend/test-*.js
+
+# Environment variables
+.env
+backend/.env
+frontend/.env
