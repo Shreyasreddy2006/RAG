@@ -22,7 +22,7 @@ const store = new DocumentStore({
 });
 
 app.use(cors({
-  origin: "*",
+  origin: ["https://rag-ihs7.vercel.app", "http://localhost:5173"],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
