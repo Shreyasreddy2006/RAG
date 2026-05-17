@@ -1,7 +1,7 @@
 const fs = require("fs/promises");
 const path = require("path");
 const { PDFParse } = require("pdf-parse");
-const { generateGroundedAnswer } = require("./gemini");
+const { generateGroundedAnswer, evaluateContext, generateWebAnswer } = require("./gemini");
 
 const STOP_WORDS = new Set([
   "a", "an", "and", "are", "as", "at", "be", "by", "can", "for", "from",
@@ -238,19 +238,33 @@ class DocumentStore {
       .slice(0, 4);
 
     if (rankedChunks.length === 0) {
+      const webAnswer = await generateWebAnswer({ query });
       return {
-        answer: "no context found",
-        sources: [],
-        found: false
+        answer: webAnswer,
+        sources: [{ id: "web", score: 1.0, text: "Google Search Fallback" }],
+        found: true
       };
     }
 
     const answer = buildAnswer(query, rankedChunks);
     if (!answer) {
+      const webAnswer = await generateWebAnswer({ query });
       return {
-        answer: "no context found",
-        sources: [],
-        found: false
+        answer: webAnswer,
+        sources: [{ id: "web", score: 1.0, text: "Google Search Fallback" }],
+        found: true
+      };
+    }
+
+    // CRAG: Evaluate if the retrieved context is relevant
+    const isRelevant = await evaluateContext({ query, contextChunks: rankedChunks });
+
+    if (!isRelevant) {
+      const webAnswer = await generateWebAnswer({ query });
+      return {
+        answer: webAnswer,
+        sources: [{ id: "web", score: 1.0, text: "Google Search Fallback (Context Irrelevant)" }],
+        found: true
       };
     }
 
